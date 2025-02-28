@@ -1,4 +1,4 @@
-
+from Usuarios import consultar
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -9,6 +9,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QPushButton,
     QRadioButton, QSizePolicy, QWidget)
 from Registro import Ui_Form
+from Resultado import Ui_Form as u3
 
 class Ui_Login2(object):
     def setupUi2(self, Login):
@@ -20,6 +21,12 @@ class Ui_Login2(object):
         self.fondo.setGeometry(QRect(0, 0, 691, 501))
         self.fondo.setPixmap(QPixmap(u"fabrizio-conti-m5fHSKYSflI-unsplash.jpg"))
         self.fondo.setScaledContents(True)
+
+        self.resultado = QLabel(Login)
+        self.resultado.setObjectName(u"resultado")
+        self.resultado.setGeometry(QRect(310, 210, 200, 21))
+        self.resultado.hide()
+
         self.UsuarioL = QLabel(Login)
         self.UsuarioL.setObjectName(u"UsuarioL")
         self.UsuarioL.setGeometry(QRect(240, 90, 58, 16))
@@ -42,7 +49,7 @@ class Ui_Login2(object):
         self.Inicio.setObjectName(u"Inicio")
         self.Inicio.setGeometry(QRect(360, 170, 100, 32))
         self.radioButton = QRadioButton(Login)
-        #self.Inicio.clicked.connect(self.inicio)
+        self.Inicio.clicked.connect(self.inicio)
 
         self.radioButton.setObjectName(u"radioButton")
         self.radioButton.setGeometry(QRect(430, 120, 20, 20))
@@ -65,6 +72,25 @@ class Ui_Login2(object):
             self.contrab.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
             self.contrab.setEchoMode(QLineEdit.EchoMode.Password)
+
+    def inicio(self):
+        if consultar()[0]:
+            self.resultados()
+        else:
+            self.resultado.setText(f"{consultar()}")
+            self.resultado.setStyleSheet("color: red; font-weight: bold;")
+
+        self.resultado.show()
+
+
+    def datos(self):
+        return self.usuariob.text(), self.contrab.text()
+
+    def resultados(self):
+        self.ventana = QWidget()
+        self.nuevo = u3()
+        self.nuevo.setupUi(self.ventana)
+        self.ventana.show()
 
 
     # setupUi

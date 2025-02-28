@@ -1,11 +1,12 @@
+import re
 from PySide6.QtCore import (QCoreApplication, QDate, Qt, QMetaObject, QPropertyAnimation, QEasingCurve)
 from PySide6.QtGui import QFont, QPixmap, QColor
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDateEdit, QLabel,
-                               QLineEdit, QPushButton, QWidget, QGraphicsOpacityEffect)
-
+                               QLineEdit, QPushButton, QWidget, QGraphicsOpacityEffect,QMessageBox)
 
 class Ui_Form(object):
     def setupUi(self, Form):
+        self.form = Form
         if not Form.objectName():
             Form.setObjectName("Form")
         Form.resize(600, 500)
@@ -100,10 +101,42 @@ class Ui_Form(object):
         self.finalizar.setGeometry(200, 50 + 6 * row_height, 200, 40)
         self.finalizar.setFont(QFont("Arial", 14, QFont.Weight.Bold))
         self.finalizar.setStyleSheet("background-color: black; color: white; border-radius: 10px;")
-       # self.finalizar.clicked.connect(self.finalizar)
+        self.finalizar.clicked.connect(self.finaliza)
 
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
+
+    def finaliza(self):
+        nombre = self.Nombref.text()
+        apellido = self.Nombref_2.text()
+        nacimiento = self.nacimiento.text()
+        contrasena = self.password.text()
+        correo = self.Nombref_4.text()
+        patron = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+        if not nombre or not apellido or not correo or not contrasena:
+            QMessageBox.warning(None, "Error", "Todos los campos son obligatorios.")
+            return
+
+        if not re.match(patron, correo):
+            QMessageBox.warning(None, "Error", "Correo electrónico no válido")
+            return
+
+        admin = "Si" if self.Adminbox.isChecked() else "No"
+
+        datos = {
+            nombre: {
+                "nombre": nombre,
+                "apellido": apellido,
+                "nacimiento": nacimiento,
+                "contraseña": contrasena,
+                "admin": admin
+            }
+        }
+
+        self.finalizar.window().close()
+        return datos
+
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", "Registro", None))
