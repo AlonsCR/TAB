@@ -3,6 +3,7 @@ from PySide6.QtCore import (QCoreApplication, QDate, Qt, QMetaObject, QPropertyA
 from PySide6.QtGui import QFont, QPixmap, QColor
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDateEdit, QLabel,
                                QLineEdit, QPushButton, QWidget, QGraphicsOpacityEffect,QMessageBox)
+from Usuarios import registrar
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -129,11 +130,13 @@ class Ui_Form(object):
                 "nombre": nombre,
                 "apellido": apellido,
                 "nacimiento": nacimiento,
+                "correo":correo,
                 "contraseña": contrasena,
                 "admin": admin
             }
         }
 
+        registrar(datos)
         self.finalizar.window().close()
         return datos
 

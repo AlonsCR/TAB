@@ -1,93 +1,98 @@
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QSizePolicy, QWidget)
+from PySide6.QtCore import QMetaObject, QRect, Qt
+from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton, QWidget
 from Usuarios import usuarios
 
+class Datos:
+    def __init__(self):
+        self.nombre_usuario = ""
+        self.apellido_usuario = ""
+        self.nacimiento_usuario = ""
+        self.correo_usuario = ""
+        self.contrasena_usuario = ""
+        self.admin_usuario = ""
+
+    def setDato(self, usuario):
+        self.nombre_usuario = usuarios[usuario]["nombre"]
+        self.apellido_usuario = usuarios[usuario]["apellido"]
+        self.nacimiento_usuario = usuarios[usuario]["nacimiento"]
+        self.correo_usuario = usuarios[usuario]["correo"]
+        self.contrasena_usuario = usuarios[usuario]["contraseña"]
+        self.admin_usuario = usuarios[usuario]["admin"]
+
 class Ui_Form(object):
-    def setupUi(self, Form):
-        if not Form.objectName():
-            Form.setObjectName(u"Form")
-        Form.resize(724, 656)
+
+    def setupUi(self, Form, datos=None):
+        Form.setObjectName("Form")
+        Form.resize(600, 500)
+        Form.setStyleSheet("background-color: black;")
+
+        font_label = QFont()
+        font_label.setFamilies(["Arial"])
+        font_label.setPointSize(20)
+        font_label.setBold(True)
+
         self.fondo = QLabel(Form)
-        self.fondo.setObjectName(u"fondo")
-        self.fondo.setGeometry(QRect(0, 0, 741, 671))
-        self.fondo.setPixmap(QPixmap(u"Users/alonsocortes/PycharmProjects/TAB/Proyecto/mujibur-rohman-ODZJ6c-b9VQ-unsplash.jpg"))
+        self.fondo.setGeometry(QRect(0, 0, 600, 500))
+        self.fondo.setPixmap(QPixmap("3.jpg"))
         self.fondo.setScaledContents(True)
-        self.label = QLabel(Form)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(130, 130, 101, 31))
-        font = QFont()
-        font.setFamilies([u"Arial"])
-        font.setPointSize(25)
-        self.label.setFont(font)
-        self.label_2 = QLabel(Form)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setFont(font)
-        self.label_3 = QLabel(Form)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(92, 230, 141, 41))
-        self.label_3.setFont(font)
-        self.label_4 = QLabel(Form)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(138, 280, 91, 31))
-        self.label_4.setFont(font)
-        self.label_5 = QLabel(Form)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(50, 410, 161, 41))
-        self.label_5.setFont(font)
-        self.label_6 = QLabel(Form)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setGeometry(QRect(90, 330, 131, 41))
-        self.label_6.setFont(font)
-        self.nombre = QLabel(Form)
-        self.nombre.setObjectName(u"nombre")
-        self.nombre.setGeometry(QRect(260, 125, 221, 31))
-        self.nombre.setText()
-        self.correo = QLabel(Form)
-        self.correo.setObjectName(u"correo")
-        self.correo.setGeometry(QRect(250, 290, 221, 31))
-        self.correo.setText()
-        self.apellido = QLabel(Form)
-        self.apellido.setObjectName(u"apellido")
-        self.apellido.setGeometry(QRect(260, 180, 221, 31))
-        self.apellido.setText()
-        self.nacim = QLabel(Form)
-        self.nacim.setObjectName(u"nacim")
-        self.nacim.setGeometry(QRect(250, 240, 221, 31))
-        self.nacim.setText()
-        self.contra = QLabel(Form)
-        self.contra.setObjectName(u"contra")
-        self.contra.setGeometry(QRect(250, 340, 221, 31))
-        self.contra.setText()
-        self.admin = QLabel(Form)
-        self.admin.setObjectName(u"admin")
-        self.admin.setGeometry(QRect(240, 410, 221, 31))
-        self.admin.setText()
+        self.fondo.lower()
+
+        self.boton_ok = QPushButton(Form)
+        self.boton_ok.setText("OK")
+        self.boton_ok.setGeometry(QRect(250, 420, 100, 40))
+        self.boton_ok.setFont(font_label)
+        self.boton_ok.setStyleSheet("""
+            background-color: #B0B0B0;  /* Gris claro */
+            color: black;  /* Texto negro */
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 14px;
+        """)
+        self.boton_ok.clicked.connect(Form.close)
+
+        font_value = QFont()
+        font_value.setFamilies(["Arial"])
+        font_value.setPointSize(20)
+
+        labels = ["Nombre:", "Apellido:", "Nacimiento:", "Correo:", "Contraseña:", "Administrador:"]
+        self.fields = []
+
+        y_offset = 50
+        for i, text in enumerate(labels):
+            label = QLabel(Form)
+            label.setText(text)
+            label.setFont(font_label)
+            label.setStyleSheet("color: black  ; background-color: transparent;")
+            label.setGeometry(QRect(50, y_offset, 150, 30))
+
+            field = QLabel(Form)
+            field.setGeometry(QRect(200, y_offset, 320, 30))
+            field.setFont(font_value)
+            field.setStyleSheet("""
+                background-color: rgba(255, 255, 255, 0.0); 
+                border-radius: 15px;
+                padding: 5px;
+                color: black;
+            """)
+            self.fields.append(field)
+            y_offset += 60
+
+        self.datos = Datos()
+        self.datos = datos
+
+        self.nombre, self.apellido, self.nacim, self.correo, self.contra, self.admin = self.fields
+
+        self.nombre.setText(self.datos.nombre_usuario)
+        self.apellido.setText(self.datos.apellido_usuario)
+        self.nacim.setText(self.datos.nacimiento_usuario)
+        self.correo.setText(self.datos.correo_usuario)
+        self.contra.setText(self.datos.contrasena_usuario)
+        self.admin.setText(self.datos.admin_usuario)
 
         self.retranslateUi(Form)
-
         QMetaObject.connectSlotsByName(Form)
-    # setupUi
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.fondo.setText("")
-        self.label.setText(QCoreApplication.translate("Form", u"Nombre:", None))
-        self.label_2.setText(QCoreApplication.translate("Form", u"Apellido:", None))
-        self.label_3.setText(QCoreApplication.translate("Form", u"Nacimiento:", None))
-        self.label_4.setText(QCoreApplication.translate("Form", u"Correo:", None))
-        self.label_5.setText(QCoreApplication.translate("Form", u"Administrador:", None))
-        self.label_6.setText(QCoreApplication.translate("Form", u"Contrase\u00f1a", None))
-        self.nombre.setText("")
-        self.correo.setText("")
-        self.apellido.setText("")
-        self.nacim.setText("")
-        self.contra.setText("")
-        self.admin.setText("")
-    # retranslateUi
-
+        Form.setWindowTitle("Perfil de Usuario")

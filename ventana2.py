@@ -9,10 +9,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QPushButton,
     QRadioButton, QSizePolicy, QWidget)
 from Registro import Ui_Form
-from Resultado import Ui_Form as u3
-
 class Ui_Login2(object):
     def setupUi2(self, Login):
+        self.usuariob = QLineEdit(Login)
         if not Login.objectName():
             Login.setObjectName(u"Login")
         Login.resize(691, 501)
@@ -74,24 +73,33 @@ class Ui_Login2(object):
             self.contrab.setEchoMode(QLineEdit.EchoMode.Password)
 
     def inicio(self):
-        if consultar()[0]:
+        x = self.usuariob.text()
+        y = self.contrab.text()
+        resultado = consultar(x, y)
+
+        if resultado is True:
+            from Resultado import Datos
+            c = Datos()
+            c.setDato(x)
+            self.resultado.hide()
             self.resultados()
         else:
-            self.resultado.setText(f"{consultar()}")
-            self.resultado.setStyleSheet("color: red; font-weight: bold;")
-
-        self.resultado.show()
-
-
-    def datos(self):
-        return self.usuariob.text(), self.contrab.text()
+            self.resultado.setText(resultado)
+            self.resultado.setStyleSheet("color: red; font-weight: bold; font-size: 14px;")
+            self.resultado.show()
 
     def resultados(self):
+        from Resultado import Ui_Form as u3
+        from Resultado import Datos
+
         self.ventana = QWidget()
         self.nuevo = u3()
-        self.nuevo.setupUi(self.ventana)
-        self.ventana.show()
 
+        datos = Datos()
+        datos.setDato(self.usuariob.text())
+
+        self.nuevo.setupUi(self.ventana, datos)
+        self.ventana.show()
 
     # setupUi
 
